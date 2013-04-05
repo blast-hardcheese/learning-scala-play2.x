@@ -9,13 +9,6 @@ import org.scalaquery.session.Database.threadLocalSession
 import play.api.db._
 import play.api.Play.current
 
-object Tasks {
-  def all() = TaskSQ.all
-  def create(label: String) = TaskSQ.create(label)
-  def delete(id: Long) = TaskSQ.delete(id)
-}
-
-
 case class Task(id: Long, label: String)
 object TaskT extends BasicTable[Task]("task") {
   def id = column[Long]("id")
@@ -24,40 +17,7 @@ object TaskT extends BasicTable[Task]("task") {
   def * = id ~ label <> (Task, Task.unapply _)
 }
 
-
-object TaskAN {
-  import anorm._
-  import anorm.SqlParser._
-
-  val task = {
-    get[Long]("id") ~
-    get[String]("label") map {
-      case id ~ label => Task(id, label)
-    }
-  }
-
-  def all(): List[Task] = DB.withConnection { implicit c =>
-    SQL("select * from task").as(task *)
-  }
-
-  def create(label: String) {
-    DB.withConnection { implicit c =>
-      SQL("insert into task (label) values ({label})").on(
-        "label" -> label
-      ).executeUpdate()
-    }
-  }
-
-  def delete(id: Long) {
-    DB.withConnection { implicit c =>
-      SQL("delete from task where id = {id}").on(
-        'id -> id
-      ).executeUpdate()
-    }
-  }
-}
-
-object TaskSQ {
+object Tasks {
   lazy val database = Database.forDataSource(DB.getDataSource())
 
   def all(): List[Task] = database withSession {
