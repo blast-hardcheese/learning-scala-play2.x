@@ -1,14 +1,34 @@
 package models
 
-import anorm._
-import anorm.SqlParser._
+import org.scalaquery.ql.basic.BasicTable
+import org.scalaquery.ql.basic.BasicDriver.Implicit._
+
+import org.scalaquery.session.Database
+import org.scalaquery.session.Database.threadLocalSession
 
 import play.api.db._
 import play.api.Play.current
 
+object TaskT extends BasicTable[(Long, String)]("task") {
+  def id = column[Long]("id")
+  def label = column[String]("label")
+
+  def * = id ~ label
+}
+
+
 case class Task(id: Long, label: String)
 
 object Task {
+  def all() = TaskSQ.all
+  def create(label: String) = TaskSQ.create(label)
+  def delete(id: Long) = TaskSQ.delete(id)
+}
+
+object TaskAN {
+  import anorm._
+  import anorm.SqlParser._
+
   val task = {
     get[Long]("id") ~
     get[String]("label") map {
@@ -33,6 +53,24 @@ object Task {
       SQL("delete from task where id = {id}").on(
         'id -> id
       ).executeUpdate()
+    }
+  }
+}
+
+object TaskSQ {
+  lazy val database = Database.forDataSource(DB.getDataSource())
+
+  def all(): List[Task] = database withSession {
+    (for(t <- TaskT) yield t.id ~ t.label).list.map({ case (id: Long, label: String) => Task(id, label) })
+  }
+
+  def create(label: String) { database withSession {
+      TaskT.label insert (label)
+    }
+  }
+
+  def delete(id: Long) { database withSession {
+      (for(t <- TaskT if(t.id is id)) yield t).delete
     }
   }
 }
