@@ -9,21 +9,21 @@ import org.scalaquery.session.Database.threadLocalSession
 import play.api.db._
 import play.api.Play.current
 
-object TaskT extends BasicTable[(Long, String)]("task") {
-  def id = column[Long]("id")
-  def label = column[String]("label")
-
-  def * = id ~ label
-}
-
-
-case class Task(id: Long, label: String)
-
-object Task {
+object Tasks {
   def all() = TaskSQ.all
   def create(label: String) = TaskSQ.create(label)
   def delete(id: Long) = TaskSQ.delete(id)
 }
+
+
+case class Task(id: Long, label: String)
+object TaskT extends BasicTable[Task]("task") {
+  def id = column[Long]("id")
+  def label = column[String]("label")
+
+  def * = id ~ label <> (Task, Task.unapply _)
+}
+
 
 object TaskAN {
   import anorm._
@@ -61,7 +61,7 @@ object TaskSQ {
   lazy val database = Database.forDataSource(DB.getDataSource())
 
   def all(): List[Task] = database withSession {
-    (for(t <- TaskT) yield t.id ~ t.label).list.map({ case (id: Long, label: String) => Task(id, label) })
+    (for(t <- TaskT) yield t).list
   }
 
   def create(label: String) { database withSession {

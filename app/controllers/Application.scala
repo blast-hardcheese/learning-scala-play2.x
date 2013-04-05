@@ -24,21 +24,21 @@ object Application extends Controller {
 
 // Tasks
   def tasks = Action {
-    Ok(views.html.task_list(Task.all(), taskForm))
+    Ok(views.html.task_list(Tasks.all(), taskForm))
   }
 
   def newTask = Action { implicit request =>
     taskForm.bindFromRequest.fold(
-      errors => BadRequest(views.html.task_list(Task.all(), errors)),
+      errors => BadRequest(views.html.task_list(Tasks.all(), errors)),
       label => {
-        Task.create(label)
+        Tasks.create(label)
         Redirect(routes.Application.tasks)
       }
     )
   }
 
   def deleteTask(id: Long) = Action {
-    Task.delete(id)
+    Tasks.delete(id)
     Redirect(routes.Application.tasks)
   }
 }
