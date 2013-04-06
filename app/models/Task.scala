@@ -1,16 +1,17 @@
 package models
 
-import org.scalaquery.ql.basic.BasicTable
-import org.scalaquery.ql.basic.BasicDriver.Implicit._
 
-import org.scalaquery.session.Database
-import org.scalaquery.session.Database.threadLocalSession
+import scala.slick.driver.BasicDriver.Table
+import scala.slick.driver.BasicDriver.Implicit._
+
+import scala.slick.session.Database
+import scala.slick.session.Database.threadLocalSession
 
 import play.api.db._
 import play.api.Play.current
 
 case class Task(id: Long, label: String)
-object TaskT extends BasicTable[Task]("task") {
+object TaskT extends Table[Task]("task") {
   def id = column[Long]("id")
   def label = column[String]("label")
 

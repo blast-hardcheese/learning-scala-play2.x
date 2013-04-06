@@ -1,6 +1,6 @@
 import sbt._
 import Keys._
-import PlayProject._
+import play.Project._
 
 object ApplicationBuild extends Build {
 
@@ -9,11 +9,12 @@ object ApplicationBuild extends Build {
 
     val appDependencies = Seq(
       // Add your project dependencies here,
-      "org.scalaquery" % "scalaquery_2.9.0-1" % "0.9.5",
+      "play" %% "play-jdbc" % "2.1-SNAPSHOT",
+      "com.typesafe.slick" % "slick_2.10" % "1.0.0",
       "org.xerial" % "sqlite-jdbc" % "3.7.2"
     )
 
-    val main = PlayProject(appName, appVersion, appDependencies, mainLang = SCALA).settings(
+    val main = play.Project(appName, appVersion, appDependencies).settings(
       // Add your own project settings here      
     )
 
