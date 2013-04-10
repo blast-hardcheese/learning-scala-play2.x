@@ -7,3 +7,8 @@ GET       /hello/:name                 controllers.Application.hello(name)
 GET       /tasks                       controllers.Application.tasks
 POST      /tasks                       controllers.Application.newTask
 GET       /tasks/:id/delete            controllers.Application.deleteTask(id: Long)
+
+#         Recipes                      "Recipes"
+GET       /recipes                     controllers.Application.listRecipes
+POST      /recipes/add                 controllers.Application.newRecipe
+GET       /recipes/clear               controllers.Application.resetRecipes

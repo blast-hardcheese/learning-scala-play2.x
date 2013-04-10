@@ -4,6 +4,7 @@ import play.api._
 import play.api.mvc._
 
 import models._
+import models.RecipeForms._
 
 import play.api.data._
 import play.api.data.Forms._
@@ -40,5 +41,40 @@ object Application extends Controller {
   def deleteTask(id: Long) = Action {
     Tasks.delete(id)
     Redirect(routes.Application.tasks)
+  }
+
+// Recipe
+
+  def newRecipe = Action { implicit request =>
+    println(recipeForm.bindFromRequest.get)
+    Ok("Everything seems alright!")
+  }
+
+  def resetRecipes = Action {
+    val count = Recipe.clearAll
+    Ok("Removed %d entries\n" format count)
+  }
+
+  def listRecipes = Action { implicit request =>
+    val tacos = Recipe(
+      name="Tacos",
+      directions=List(
+        "Cook meat",
+        "Put in shell",
+        "Put lettuce in the shell",
+        "Put cheese in the shell",
+        "Put salsa in the shell"
+      ),
+      ingredients=List(
+        Ingredient("taco shell"),
+        Ingredient("meat"),
+        Ingredient("lettuce"),
+        Ingredient("cheese"),
+        Ingredient("salsa")
+      )
+    )
+
+    val filledForm = recipeForm.fill(tacos)
+    Ok(views.html.recipes_new(filledForm))
   }
 }

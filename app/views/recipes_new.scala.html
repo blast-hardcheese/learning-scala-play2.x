@@ -1,0 +1,24 @@
+@(recipeForm: Form[Recipe], steps: Int = 2, ingredients: Int = 2)
+
+@import helper._
+
+@main("New Recipe") {
+    @form(routes.Application.newRecipe) {
+        @inputText(recipeForm("name"), '_label -> "Name")
+
+    @repeat(recipeForm("directions"), min = steps) { directionField =>
+        @inputText(directionField, '_label -> "Step")
+    }
+
+    @repeat(recipeForm("ingredients"), min = ingredients) { ingredientForm =>
+        <dl class="ingredient">
+        @inputText(ingredientForm("name"), '_label -> "Name", 'class -> "ingredient-name")
+        @inputText(ingredientForm("quantity"), '_label -> "Quantity", 'class -> "ingredient-property")
+        @inputText(ingredientForm("unit"), '_label -> "Unit", 'class -> "ingredient-property")
+        @inputText(ingredientForm("notes"), '_label -> "Notes", 'class -> "ingredient-property")
+        </dl>
+    }
+
+        <input type="submit" value="Create" />
+    }
+}
