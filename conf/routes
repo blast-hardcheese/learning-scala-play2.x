@@ -12,3 +12,4 @@ GET       /tasks/:id/delete            controllers.Application.deleteTask(id: Lo
 GET       /recipes                     controllers.Application.listRecipes
 POST      /recipes/add                 controllers.Application.newRecipe
 GET       /recipes/clear               controllers.Application.resetRecipes
+GET       /recipes/edit/:name          controllers.Application.editRecipe(name: String)

@@ -57,5 +57,6 @@ object Recipe extends ModelCompanion[Recipe, ObjectId] {
     count
   }
 
+  def findByName(name: String): Option[Recipe] = dao.findOne(MongoDBObject("name" -> name))
   def allForIngredient(name: String): SalatMongoCursor[Recipe] = dao.find(MongoDBObject("ingredients.name" -> name))
 }
