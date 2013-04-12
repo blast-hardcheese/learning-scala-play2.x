@@ -2,7 +2,7 @@
 
 @for(recipe <- recipes) {
     <dl>
-        <dt><a href="#">@recipe.name</a></dt>
+        <dt><a href="@routes.Application.editRecipe(recipe.name)">@recipe.name</a></dt>
         <dd>@recipe.description</dd>
     </dl>
     <br /><br />
