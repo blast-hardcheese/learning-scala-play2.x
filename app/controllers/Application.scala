@@ -55,7 +55,30 @@ object Application extends Controller {
     Ok("Removed %d entries\n" format count)
   }
 
-  def listRecipes = Action { implicit request =>
+  def createRecipes {
+    println("sup")
+
+    val cheesecrackers = Recipe(
+      name="Cheese Crackers",
+      directions=List(
+        "Turn on stove",
+        "Oil pan",
+        "Pour some cheese in pan",
+        "Mix in garlic",
+        "Move oil around in pan to ensure cheese doesn't burn",
+        "When cheese starts to bubble, drain oil",
+        "Put in refrigerator to cool",
+        "When cool, sandwich cheese between paper towels to draw away the oil"
+      ),
+      ingredients=List(
+        Ingredient(
+          "cheese",
+          notes=Some("Just fill the bottom of whatever pan you're using")
+        )
+      )
+    )
+    Recipe.save(cheesecrackers)
+
     val tacos = Recipe(
       name="Tacos",
       directions=List(
@@ -73,8 +96,14 @@ object Application extends Controller {
         Ingredient("salsa")
       )
     )
+    Recipe.save(tacos)
 
-    val filledForm = recipeForm.fill(tacos)
-    Ok(views.html.recipes_new(filledForm))
+    println("Recipes: " + Recipe.findAll.toList)
+
+    println("Cheese recipes: " + Recipe.allForIngredient("cheese").count)
+  }
+
+  def listRecipes = Action { implicit request =>
+    Ok("Recipes: " + Recipe.findAll.toList)
   }
 }
