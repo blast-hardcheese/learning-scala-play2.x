@@ -65,6 +65,7 @@ object Application extends Controller {
 
     val cheesecrackers = Recipe(
       name="Cheese Crackers",
+      description="Delicious cheese crackers, gluten free! Keto friendly!",
       directions=List(
         "Turn on stove",
         "Oil pan",
@@ -86,6 +87,7 @@ object Application extends Controller {
 
     val tacos = Recipe(
       name="Tacos",
+      description="Tacos, pretty tasty.",
       directions=List(
         "Cook meat",
         "Put in shell",
@@ -111,7 +113,7 @@ object Application extends Controller {
   def editRecipe(name: String) = Action { implicit request =>
     val recipe = Recipe.findByName(name) match {
       case Some(r: Recipe) => r
-      case None => Recipe(name=name, directions=List(), ingredients=List())
+      case None => Recipe(name=name, description="", directions=List(), ingredients=List())
     }
 
     def qsInt(name: String, default: Int): Int = {

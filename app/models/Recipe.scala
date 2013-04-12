@@ -26,6 +26,7 @@ object RecipeForms {
     mapping(
       "id" -> ignored(new ObjectId),
       "name" -> nonEmptyText,
+      "description" -> nonEmptyText,
       "directions" -> list(text),
       "ingredients" -> list(ingredientMapping)
     )(Recipe.apply)(Recipe.unapply)
@@ -42,6 +43,7 @@ case class Ingredient(
 case class Recipe(
     id: ObjectId = new ObjectId,
     name: String,
+    description: String,
     directions: List[String],
     ingredients: List[Ingredient]
   )

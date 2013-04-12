@@ -5,6 +5,7 @@
 @main("New Recipe") {
     @form(routes.Application.newRecipe) {
         @inputText(recipeForm("name"), '_label -> "Name")
+        @inputText(recipeForm("description"), '_label -> "Description")
 
     @repeat(recipeForm("directions"), min = steps) { directionField =>
         @inputText(directionField, '_label -> "Step")
