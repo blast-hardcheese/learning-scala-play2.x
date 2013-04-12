@@ -1,0 +1,9 @@
+@(recipes: List[Recipe])
+
+@for(recipe <- recipes) {
+    <dl>
+        <dt><a href="#">@recipe.name</a></dt>
+        <dd>@recipe.description</dd>
+    </dl>
+    <br /><br />
+}

@@ -129,7 +129,7 @@ object Application extends Controller {
     Ok(views.html.recipes_new(filledForm, steps = steps, ingredients = ingredients))
   }
 
-  def listRecipes = Action { implicit request =>
-    Ok("Recipes: " + Recipe.findAll.toList)
+  def listRecipes = Action {
+    Ok(views.html.recipes_list(Recipe.findAll.toList))
   }
 }
