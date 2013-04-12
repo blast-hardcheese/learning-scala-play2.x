@@ -45,6 +45,31 @@ object Application extends Controller {
 
 // Recipe
 
+  def listRecipes = Action {
+    Ok(views.html.recipes_list(Recipe.findAll.toList))
+  }
+
+  def editRecipe(name: String) = Action { implicit request =>
+    val recipe = Recipe.findByName(name) match {
+      case Some(r: Recipe) => r
+      case None => Recipe(name=name, description="", directions=List(), ingredients=List())
+    }
+
+    def qsInt(name: String, default: Int): Int = {
+      request.queryString.get(name).getOrElse(Seq[String]()) match {
+        case (x: String) :: Nil => x.toInt
+        case xs :: (x: String) :: Nil => x.toInt
+        case z => default
+      }
+    }
+
+    val steps = qsInt("steps", 2)
+    val ingredients = qsInt("ingredients", 2)
+
+    val filledForm = recipeForm.fill(recipe)
+    Ok(views.html.recipes_new(filledForm, steps = steps, ingredients = ingredients))
+  }
+
   def newRecipe = Action { implicit request =>
     recipeForm.bindFromRequest.fold(
       errors => BadRequest(views.html.recipes_new(errors)),
@@ -108,30 +133,5 @@ object Application extends Controller {
     println("Recipes: " + Recipe.findAll.toList)
 
     println("Cheese recipes: " + Recipe.allForIngredient("cheese").count)
-  }
-
-  def editRecipe(name: String) = Action { implicit request =>
-    val recipe = Recipe.findByName(name) match {
-      case Some(r: Recipe) => r
-      case None => Recipe(name=name, description="", directions=List(), ingredients=List())
-    }
-
-    def qsInt(name: String, default: Int): Int = {
-      request.queryString.get(name).getOrElse(Seq[String]()) match {
-        case (x: String) :: Nil => x.toInt
-        case xs :: (x: String) :: Nil => x.toInt
-        case z => default
-      }
-    }
-
-    val steps = qsInt("steps", 2)
-    val ingredients = qsInt("ingredients", 2)
-
-    val filledForm = recipeForm.fill(recipe)
-    Ok(views.html.recipes_new(filledForm, steps = steps, ingredients = ingredients))
-  }
-
-  def listRecipes = Action {
-    Ok(views.html.recipes_list(Recipe.findAll.toList))
   }
 }
