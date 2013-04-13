@@ -9,6 +9,13 @@ import models.RecipeForms._
 import play.api.data._
 import play.api.data.Forms._
 
+object MyHelpers {
+    def urlDecode(string: String)(implicit codec: play.api.mvc.Codec): String =
+      java.net.URLDecoder.decode(string, codec.charset)
+}
+
+import MyHelpers._
+
 object Application extends Controller {
 
   val taskForm = Form(
@@ -49,10 +56,11 @@ object Application extends Controller {
     Ok(views.html.recipes_list(Recipe.findAll.toList))
   }
 
-  def editRecipe(name: String) = Action { implicit request =>
+  def editRecipe(encodedName: String) = Action { implicit request =>
+    val name = urlDecode(encodedName)
     val recipe = Recipe.findByName(name) match {
       case Some(r: Recipe) => r
-      case None => Recipe(name=name, description="", directions=List(), ingredients=List())
+      case None => Recipe(name=name, description="New recipe")
     }
 
     def qsInt(name: String, default: Int): Int = {
