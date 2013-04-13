@@ -5,6 +5,7 @@ import play.api.libs.functional.syntax._
 
 import play.api.data._
 import play.api.data.Forms._
+import play.api.data.format.Formatter
 
 import com.novus.salat._
 import com.novus.salat.annotations._
@@ -15,6 +16,14 @@ import se.radley.plugin.salat._
 import mongoContext._
 
 object RecipeForms {
+  implicit def objectIdFormat: Formatter[ObjectId] = new Formatter[ObjectId] {
+    def bind(key: String, data: Map[String, String]) = data
+      .get(key)
+      .map({ value: String => new ObjectId(value) })
+      .toRight(Seq(FormError(key, "error.required", Nil)))
+    def unbind(key: String, value: ObjectId) = Map(key -> value.toString)
+  }
+
   val ingredientMapping = mapping(
       "name" -> nonEmptyText,
       "quantity" -> optional[String](text),
@@ -24,7 +33,7 @@ object RecipeForms {
 
   val recipeForm = Form(
     mapping(
-      "id" -> ignored(new ObjectId),
+      "id" -> default(of[ObjectId], new ObjectId),
       "name" -> nonEmptyText,
       "description" -> nonEmptyText,
       "directions" -> list(text),
@@ -44,8 +53,8 @@ case class Recipe(
     id: ObjectId = new ObjectId,
     name: String,
     description: String,
-    directions: List[String],
-    ingredients: List[Ingredient]
+    directions: List[String] = List(),
+    ingredients: List[Ingredient] = List()
   )
 
 
