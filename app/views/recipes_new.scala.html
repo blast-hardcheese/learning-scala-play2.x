@@ -4,21 +4,23 @@
 
 @main("New Recipe") {
     @form(routes.Application.newRecipe) {
+        <input type="hidden" value="@recipeForm("id")" />
+
         @inputText(recipeForm("name"), '_label -> "Name")
         @inputText(recipeForm("description"), '_label -> "Description")
 
-    @repeat(recipeForm("directions"), min = steps) { directionField =>
-        @inputText(directionField, '_label -> "Step")
-    }
+        @repeat(recipeForm("directions")) { directionField =>
+            @inputText(directionField, '_label -> "Step")
+        }
 
-    @repeat(recipeForm("ingredients"), min = ingredients) { ingredientForm =>
-        <dl class="ingredient">
-        @inputText(ingredientForm("name"), '_label -> "Name", 'class -> "ingredient-name")
-        @inputText(ingredientForm("quantity"), '_label -> "Quantity", 'class -> "ingredient-property")
-        @inputText(ingredientForm("unit"), '_label -> "Unit", 'class -> "ingredient-property")
-        @inputText(ingredientForm("notes"), '_label -> "Notes", 'class -> "ingredient-property")
-        </dl>
-    }
+        @repeat(recipeForm("ingredients")) { ingredientForm =>
+            <dl class="ingredient">
+            @inputText(ingredientForm("name"), '_label -> "Name", 'class -> "ingredient-name")
+            @inputText(ingredientForm("quantity"), '_label -> "Quantity", 'class -> "ingredient-property")
+            @inputText(ingredientForm("unit"), '_label -> "Unit", 'class -> "ingredient-property")
+            @inputText(ingredientForm("notes"), '_label -> "Notes", 'class -> "ingredient-property")
+            </dl>
+        }
 
         <input type="submit" value="Create" />
     }
