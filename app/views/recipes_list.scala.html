@@ -2,17 +2,36 @@
 
 @import helper._
 
-<a href="@routes.RecipeController.newRecipe">New recipe</a>
+@main("Recipe List") {
+<h3>Recipe List</h3>
+<style type="text/css">
+form {
+    display: inline-block;
+}
+</style>
+
+<p>
+    <a href="@routes.RecipeController.newRecipe">New recipe</a>
+</p>
 
 @for(recipe <- recipes) {
-    <dl>
-        <dt><a href="@routes.RecipeController.showRecipe(recipe.name)">@recipe.name (@recipe.id)</a>
+    <div class="recipe">
+        <a href="@routes.RecipeController.showRecipe(recipe.name)" title="@recipe.id">@recipe.name</a>
         @form(routes.RecipeController.deleteRecipe) {
             <input name="id" type="hidden" value="@recipe.id" />
-            <input type="submit" value="Delete" />
+            <a href="#delete@recipe.id" class="submit">[X]</a>
         }
-        </dt>
-        <dd>@recipe.description</dd>
-    </dl>
-    <br /><br />
+        <span class="description">@recipe.description</span>
+    </div>
+}
+
+<script type="text/javascript">
+jQuery(function($) {
+    $("div.recipe form").each(function(i, form) {
+        $("a.submit", form).click({"form": form}, function(event) {
+            event.data.form.submit()
+        });
+    })
+})
+</script>
 }
