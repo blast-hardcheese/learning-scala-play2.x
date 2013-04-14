@@ -3,8 +3,9 @@
 @import helper._
 
 @main("New Recipe") {
-    @form(routes.Application.newRecipe) {
-        <input type="hidden" value="@recipeForm("id")" />
+    <a href="@routes.RecipeController.listRecipes">Back</a>
+    @form(routes.RecipeController.newRecipe) {
+        <input type="hidden" value="@recipeForm("id").value" />
 
         @inputText(recipeForm("name"), '_label -> "Name")
         @inputText(recipeForm("description"), '_label -> "Description")

@@ -9,7 +9,7 @@ POST      /tasks                       controllers.Application.newTask
 GET       /tasks/:id/delete            controllers.Application.deleteTask(id: Long)
 
 #         Recipes                      "Recipes"
-GET       /recipes                     controllers.Application.listRecipes
-POST      /recipes/add                 controllers.Application.newRecipe
-GET       /recipes/clear               controllers.Application.resetRecipes
-GET       /recipes/edit/:name          controllers.Application.editRecipe(name: String)
+GET       /recipes                     controllers.RecipeController.listRecipes
+POST      /recipes/add                 controllers.RecipeController.newRecipe
+GET       /recipes/clear               controllers.RecipeController.resetRecipes
+GET       /recipes/edit/:name          controllers.RecipeController.editRecipe(name: String)
