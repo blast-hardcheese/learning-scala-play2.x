@@ -40,6 +40,10 @@ object RecipeForms {
       "ingredients" -> list(ingredientMapping)
     )(Recipe.apply)(Recipe.unapply)
   )
+
+  val singleRecipeIdForm = Form(
+      "id" -> of[ObjectId]
+  )
 }
 
 case class Ingredient(
@@ -70,4 +74,5 @@ object Recipe extends ModelCompanion[Recipe, ObjectId] {
 
   def findByName(name: String): Option[Recipe] = dao.findOne(MongoDBObject("name" -> name))
   def allForIngredient(name: String): SalatMongoCursor[Recipe] = dao.find(MongoDBObject("ingredients.name" -> name))
+  def removeId(id: ObjectId) { dao.removeById(id) }
 }

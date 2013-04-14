@@ -53,6 +53,16 @@ object RecipeController extends Controller {
     )
   }
 
+  def deleteRecipe = Action { implicit request =>
+    singleRecipeIdForm.bindFromRequest.fold(
+      errors => Redirect(routes.RecipeController.listRecipes),
+      recipeId => {
+        Recipe.removeId(recipeId)
+        Redirect(routes.RecipeController.listRecipes)
+      }
+    )
+  }
+
   def resetRecipes = Action {
     val count = Recipe.clearAll
     Ok("Removed %d entries\n" format count)

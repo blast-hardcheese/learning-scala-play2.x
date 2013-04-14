@@ -1,8 +1,15 @@
 @(recipes: List[Recipe])
 
+@import helper._
+
 @for(recipe <- recipes) {
     <dl>
-        <dt><a href="@routes.RecipeController.editRecipe(recipe.name)">@recipe.name</a></dt>
+        <dt><a href="@routes.RecipeController.editRecipe(recipe.name)">@recipe.name (@recipe.id)</a>
+        @form(routes.RecipeController.deleteRecipe) {
+            <input name="id" type="hidden" value="@recipe.id" />
+            <input type="submit" value="Delete" />
+        }
+        </dt>
         <dd>@recipe.description</dd>
     </dl>
     <br /><br />
