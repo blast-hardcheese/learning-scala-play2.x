@@ -27,10 +27,6 @@ object RecipeController extends Controller {
 
   def editRecipe(encodedName: String) = Action { implicit request =>
     val name = urlDecode(encodedName)
-    val recipe = Recipe.findByName(name) match {
-      case Some(r: Recipe) => r
-      case None => Recipe(name=name, description="New recipe")
-    }
 
     def qsInt(name: String, default: Int): Int = {
       request.queryString.get(name).getOrElse(Seq[String]()) match {
@@ -43,8 +39,10 @@ object RecipeController extends Controller {
     val steps = qsInt("steps", 2)
     val ingredients = qsInt("ingredients", 2)
 
-    val filledForm = recipeForm.fill(recipe)
-    Ok(views.html.recipes_new(filledForm, steps = steps, ingredients = ingredients))
+    Recipe.findByName(name) match {
+      case Some(r: Recipe) => Ok(views.html.recipes_edit(recipeForm.fill(r), steps = steps, ingredients = ingredients))
+      case None => Redirect(routes.RecipeController.newRecipe)
+    }
   }
 
   def saveRecipe = Action { implicit request =>
