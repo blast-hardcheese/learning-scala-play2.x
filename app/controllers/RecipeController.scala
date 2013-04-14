@@ -21,6 +21,10 @@ object RecipeController extends Controller {
     Ok(views.html.recipes_list(Recipe.findAll.toList))
   }
 
+  def newRecipe = Action {
+    Ok(views.html.recipes_new(recipeForm))
+  }
+
   def editRecipe(encodedName: String) = Action { implicit request =>
     val name = urlDecode(encodedName)
     val recipe = Recipe.findByName(name) match {
@@ -43,7 +47,7 @@ object RecipeController extends Controller {
     Ok(views.html.recipes_new(filledForm, steps = steps, ingredients = ingredients))
   }
 
-  def newRecipe = Action { implicit request =>
+  def saveRecipe = Action { implicit request =>
     recipeForm.bindFromRequest.fold(
       errors => BadRequest(views.html.recipes_new(errors)),
       recipe => {

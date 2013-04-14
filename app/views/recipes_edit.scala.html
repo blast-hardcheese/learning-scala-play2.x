@@ -2,7 +2,7 @@
 
 @import helper._
 
-@main("Creating new Recipe") {
+@main("Editing recipe \"%s\"".format(recipeForm("name").value)) {
     <a href="@routes.RecipeController.listRecipes">Back</a>
 
     @form(routes.RecipeController.saveRecipe) {
@@ -24,6 +24,6 @@
             </dl>
         }
 
-        <input type="submit" value="Create Recipe" />
+        <input type="submit" value="Save Recipe" />
     }
 }
