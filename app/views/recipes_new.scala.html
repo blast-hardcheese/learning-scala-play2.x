@@ -5,7 +5,7 @@
 @main("New Recipe") {
     <a href="@routes.RecipeController.listRecipes">Back</a>
     @form(routes.RecipeController.newRecipe) {
-        <input type="hidden" value="@recipeForm("id").value" />
+        <input name="id" type="hidden" value="@recipeForm("id").value" />
 
         @inputText(recipeForm("name"), '_label -> "Name")
         @inputText(recipeForm("description"), '_label -> "Description")
