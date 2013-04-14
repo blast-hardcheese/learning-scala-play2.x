@@ -3,18 +3,18 @@
 @import helper._
 
 @field(label: String, field: Any) = {
-    <dl>
-        <dt>@label:</dt>
-        <dd>@field</dd>
-    </dl>
+    <tr>
+        <th>@label:</th>
+        <td>@field</td>
+    </tr>
 }
 
 @main(recipe.name) {
     <a href="@routes.RecipeController.listRecipes">Back</a>
     <a href="@routes.RecipeController.editRecipe(recipe.name)">Edit</a>
 
-    @field("Name", recipe.name)
-    @field("Description", recipe.description)
+    <table>
+        <caption>@recipe.name: @recipe.description</caption>
 
     @for(direction <- recipe.directions) {
         @field("Step", direction)
@@ -26,4 +26,5 @@
         @field("Unit", ingredient.unit)
         @field("Notes", ingredient.notes)
     }
+    </table>
 }
