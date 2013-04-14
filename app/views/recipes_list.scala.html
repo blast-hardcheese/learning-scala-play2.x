@@ -2,6 +2,8 @@
 
 @import helper._
 
+<a href="@routes.RecipeController.newRecipe">New recipe</a>
+
 @for(recipe <- recipes) {
     <dl>
         <dt><a href="@routes.RecipeController.editRecipe(recipe.name)">@recipe.name (@recipe.id)</a>
