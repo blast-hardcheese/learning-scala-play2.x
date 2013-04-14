@@ -13,5 +13,6 @@ GET       /recipes                     controllers.RecipeController.listRecipes
 GET       /recipes/new                 controllers.RecipeController.newRecipe
 POST      /recipes/add                 controllers.RecipeController.saveRecipe
 GET       /recipes/clear               controllers.RecipeController.resetRecipes
+GET       /recipes/show/:name          controllers.RecipeController.showRecipe(name: String)
 GET       /recipes/edit/:name          controllers.RecipeController.editRecipe(name: String)
 POST      /recipes/delete              controllers.RecipeController.deleteRecipe

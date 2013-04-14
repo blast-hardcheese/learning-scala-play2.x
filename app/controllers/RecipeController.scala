@@ -25,6 +25,15 @@ object RecipeController extends Controller {
     Ok(views.html.recipes_new(recipeForm))
   }
 
+  def showRecipe(encodedName: String) = Action {
+    val name = urlDecode(encodedName)
+
+    Recipe.findByName(name) match {
+      case Some(r: Recipe) => Ok(views.html.recipes_show(r))
+      case None => Redirect(routes.RecipeController.newRecipe)
+    }
+  }
+
   def editRecipe(encodedName: String) = Action { implicit request =>
     val name = urlDecode(encodedName)
 

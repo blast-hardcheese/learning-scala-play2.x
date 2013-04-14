@@ -3,7 +3,7 @@
 @import helper._
 
 @main("Editing recipe \"%s\"".format(recipeForm("name").value)) {
-    <a href="@routes.RecipeController.listRecipes">Back</a>
+    <a href="@routes.RecipeController.showRecipe(recipeForm("name").value.get)">Back</a>
 
     @form(routes.RecipeController.saveRecipe) {
         <input name="id" type="hidden" value="@recipeForm("id").value" />

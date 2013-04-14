@@ -6,7 +6,7 @@
 
 @for(recipe <- recipes) {
     <dl>
-        <dt><a href="@routes.RecipeController.editRecipe(recipe.name)">@recipe.name (@recipe.id)</a>
+        <dt><a href="@routes.RecipeController.showRecipe(recipe.name)">@recipe.name (@recipe.id)</a>
         @form(routes.RecipeController.deleteRecipe) {
             <input name="id" type="hidden" value="@recipe.id" />
             <input type="submit" value="Delete" />

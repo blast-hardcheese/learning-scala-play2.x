@@ -1,0 +1,29 @@
+@(recipe: Recipe, steps: Int = 2, ingredients: Int = 2)
+
+@import helper._
+
+@field(label: String, field: Any) = {
+    <dl>
+        <dt>@label:</dt>
+        <dd>@field</dd>
+    </dl>
+}
+
+@main(recipe.name) {
+    <a href="@routes.RecipeController.listRecipes">Back</a>
+    <a href="@routes.RecipeController.editRecipe(recipe.name)">Edit</a>
+
+    @field("Name", recipe.name)
+    @field("Description", recipe.description)
+
+    @for(direction <- recipe.directions) {
+        @field("Step", direction)
+    }
+
+    @for(ingredient <- recipe.ingredients) {
+        @field("Name", ingredient.name)
+        @field("Quantity", ingredient.quantity)
+        @field("Unit", ingredient.unit)
+        @field("Notes", ingredient.notes)
+    }
+}
