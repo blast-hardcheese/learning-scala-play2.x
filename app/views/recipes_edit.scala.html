@@ -1,6 +1,19 @@
 @(recipeForm: Form[Recipe], steps: Int = 2, ingredients: Int = 2)
 
 @import helper._
+@import helper.twitterBootstrap._
+
+<style type="text/css">
+.directions {
+    position: relative;
+    display: inline-block;
+}
+.directions > .add {
+    position: absolute;
+    bottom: 0em;
+    right: -1.5em;
+}
+</style>
 
 @main("Editing recipe \"%s\"".format(recipeForm("name").value)) {
     <a href="@routes.RecipeController.showRecipe(recipeForm("name").value.get)">Back</a>
@@ -8,22 +21,74 @@
     @form(routes.RecipeController.saveRecipe) {
         <input name="id" type="hidden" value="@recipeForm("id").value" />
 
+        <h4>Info</h4>
         @inputText(recipeForm("name"), '_label -> "Name")
         @inputText(recipeForm("description"), '_label -> "Description")
 
+        <h4>Directions</h4>
+        <div id="directions" class="directions">
         @repeat(recipeForm("directions")) { directionField =>
             @inputText(directionField, '_label -> "Step")
         }
+        <a href='#directions' class='add'>[+]</a>
+        </div>
 
+        <h4>Ingredients</h4>
         @repeat(recipeForm("ingredients")) { ingredientForm =>
-            <dl class="ingredient">
             @inputText(ingredientForm("name"), '_label -> "Name", 'class -> "ingredient-name")
             @inputText(ingredientForm("quantity"), '_label -> "Quantity", 'class -> "ingredient-property")
             @inputText(ingredientForm("unit"), '_label -> "Unit", 'class -> "ingredient-property")
             @inputText(ingredientForm("notes"), '_label -> "Notes", 'class -> "ingredient-property")
-            </dl>
         }
 
         <input type="submit" value="Save Recipe" />
     }
+
+    <script type="text/javascript">
+jQuery(function($) {
+    var escape = function(s) { return s.replace(/[^a-zA-Z0-9]/g, "_") }
+
+    var buildSequential = function(label, key, i, value) {
+        var name = key + "[" + i + "]"
+        var prefix = escape(name)
+
+        var _container = $("<div />", {
+            "class": "clearfix",
+            "id": escape(name + ".field"),
+        });
+
+        var _label = $("<label />", {
+            "for": prefix,
+            "html": label,
+        })
+
+        var _input = $("<div />", {
+            "class": "input",
+            "html": $("<input />", {
+                    "type": "text",
+                    "id": prefix,
+                    "name": name,
+                    "value": value,
+                })
+            })
+        _container.append(_label)
+        _container.append(_input)
+        return _container
+    }
+
+    window.directions = {};
+    (function(self, $elem) {
+        self.count = $('div.clearfix[id^=directions_]', $elem).size()
+        self.add = function() {
+            console.log("Adding step " + self.count);
+            $elem.append(buildSequential("Step", "directions", self.count))
+            self.count += 1
+        }
+    })(window.directions, $('div.directions'));
+
+    $('div.directions > a.add').click(function(event) {
+        directions.add()
+    })
+})
+    </script>
 }
